@@ -11,12 +11,14 @@ TEMP_DIR="/tmp/Discord"
 # Discord installer URL and channels
 DOWNLOAD_URL="https://discord.com/api/download"
 STABLE=$DOWNLOAD_URL"?platform=linux&format=tar.gz"
-#BETA=$DOWNLOAD_URL"/ptb?platform=linux&format=tar.gz"
-#CANARY=$DOWNLOAD_URL"/canary?platform=linux&format=tar.gz"
+BETA=$DOWNLOAD_URL"/ptb?platform=linux&format=tar.gz"
+CANARY=$DOWNLOAD_URL"/canary?platform=linux&format=tar.gz"
 
 SERVER_VER=$(curl -L -s --head $STABLE | grep location | grep -oP "(?<=linux/).*(?=/discord)")
 LOCAL_VER=$(cat $INSTALL_DIR/Discord/resources/build_info.json | jq -r .version)
+CHANNEL=$(cat $INSTALL_DIR/Discord/resources/build_info.json | jq -r .releaseChannel)
 
+# Errors if the version 
 if [[ $SERVER_VER == "" ]]
 then
     echo "The Discord servers are unavailable. Please try again later"
@@ -33,14 +35,22 @@ fi
 
 if [[ $SERVER_VER == $LOCAL_VER ]] 
 then
-    echo "You have the latest version installed ($LOCAL_VER). No actions required"
+    echo "You have the latest $CHANNEL version installed ($LOCAL_VER). No actions required"
     exit 0
 else
     echo "Local version ($LOCAL_VER) does not match latest server version ($SERVER_VER)"
 fi
 
-echo "Downloading Discord"
+#echo "Closing active Discord processes"
+#pkill Discord
+
+echo "Downloading Discord from $STABLE"
 curl -L -o "$TEMP_DIR/discord-stable.tar.gz" $STABLE --create-dirs
 
 echo "Updating Discord"
 tar -xzf $TEMP_DIR/discord-stable.tar.gz -C $INSTALL_DIR
+
+echo "Running post-install scripts"
+bash $INSTALL_DIR/Discord/postinst.sh
+
+echo "Done!"
