@@ -11,8 +11,7 @@ STABLE=$DOWNLOAD_URL"?platform=linux&format=tar.gz"
 BETA=$DOWNLOAD_URL"/ptb?platform=linux&format=tar.gz"
 CANARY=$DOWNLOAD_URL"/canary?platform=linux&format=tar.gz"
 
-#SERVER_VER=$(curl -L -s --head $STABLE | grep location | grep -oP "(?<=linux/).*(?=/discord)")
-SERVER_VER="0.0.39"
+SERVER_VER=$(curl -L -s --head $STABLE | grep location | grep -oP "(?<=linux/).*(?=/discord)")
 LOCAL_VER=$(cat $INSTALL_DIR/Discord/resources/build_info.json | jq -r .version)
 CHANNEL=$(cat $INSTALL_DIR/Discord/resources/build_info.json | jq -r .releaseChannel)
 
@@ -32,7 +31,7 @@ fi
 
 if [[ $SERVER_VER == $LOCAL_VER ]] 
 then
-    echo "You have the latest $CHANNEL version installed ($LOCAL_VER). No actions required"
+    echo "You have the latest $CHANNEL version installed ($LOCAL_VER). Nothing to do!"
     exit 0
 else
     echo "Local version ($LOCAL_VER) does not match latest server version ($SERVER_VER)"
@@ -41,4 +40,3 @@ else
 fi
 
 echo "Quick patcher complete. Try launching Discord"
-echo "If that fails, try again using the patcher_stable script with the -repair flag"
