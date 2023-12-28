@@ -6,12 +6,10 @@ INSTALL_DIR="$HOME/.local/bin"
 #INSTALL_DIR="/usr/local/bin"
 
 # Discord installer URL and channels
-DOWNLOAD_URL="https://discord.com/api/download"
-STABLE=$DOWNLOAD_URL"?platform=linux&format=tar.gz"
-BETA=$DOWNLOAD_URL"/ptb?platform=linux&format=tar.gz"
-CANARY=$DOWNLOAD_URL"/canary?platform=linux&format=tar.gz"
+BRANCH="stable" #"stable", "ptb", "canary"
+UPDATE_URL="https://discord.com/api/updates/$BRANCH?platform=linux"
 
-SERVER_VER=$(curl -L -s --head $STABLE | grep location | grep -oP "(?<=linux/).*(?=/discord)")
+SERVER_VER=$(curl -s $UPDATE_URL | jq -r .name)
 LOCAL_VER=$(cat $INSTALL_DIR/Discord/resources/build_info.json | jq -r .version)
 CHANNEL=$(cat $INSTALL_DIR/Discord/resources/build_info.json | jq -r .releaseChannel)
 
@@ -39,4 +37,4 @@ else
     jq --arg SVER $SERVER_VER '.version = "\($SVER)"' > $INSTALL_DIR/Discord/resources/jqtmp | mv $INSTALL_DIR/Discord/resources/jqtmp $INSTALL_DIR/Discord/resources/build_info.json
 fi
 
-echo "Quick patcher complete. Try launching Discord"
+echo "Quick patcher complete"
