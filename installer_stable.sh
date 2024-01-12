@@ -31,7 +31,7 @@ perl -i -pe 's/(?<=(Path=)).*/$ENV{INSTALL_DIR}\/Discord/gmi' $INSTALL_DIR/Disco
 
 # Update the desktop shortcut
 echo Updating the desktop shortcuts
-#mv $INSTALL_DIR/Discord/discord.desktop $HOME/.local/share/applications/
+mv $INSTALL_DIR/Discord/discord.desktop $HOME/.local/share/applications/
 cat $INSTALL_DIR/Discord/discord.desktop
 mv $INSTALL_DIR/Discord/discord.desktop.bkp $INSTALL_DIR/Discord/discord.desktop
 xdg-desktop-menu forceupdate
