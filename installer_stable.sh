@@ -16,7 +16,7 @@ STABLE=$DOWNLOAD_URL"?platform=linux&format=tar.gz"
 
 
 echo "Downloading Discord"
-#curl -L -o "$TEMP_DIR/discord-stable.tar.gz" $STABLE --create-dirs
+curl -L -o "$TEMP_DIR/discord-stable.tar.gz" $STABLE --create-dirs
 
 echo "Installing Discord to $INSTALL_DIR"
 tar -xzf $TEMP_DIR/discord-stable.tar.gz -C $INSTALL_DIR
